@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS } from '@/lib/constants';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const TestimonialsSection = () => {
   // Double the testimonials for infinite scrolling effect
   const duplicatedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
   
-  const [scrollPosition, setScrollPosition] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   
   // Auto scroll effect with better performance
@@ -63,24 +61,6 @@ const TestimonialsSection = () => {
       }
     };
   }, []);
-  
-  const scrollLeft = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({
-        left: -300,
-        behavior: 'smooth',
-      });
-    }
-  };
-  
-  const scrollRight = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({
-        left: 300,
-        behavior: 'smooth',
-      });
-    }
-  };
 
   return (
     <section className="py-16 bg-black">
@@ -96,26 +76,16 @@ const TestimonialsSection = () => {
           <p className="text-gray-300 max-w-3xl mx-auto">What our clients say about our work.</p>
         </motion.div>
         
-        <div className="relative">
-          {/* Left scroll button */}
-          <button 
-            onClick={scrollLeft}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 text-white rounded-full p-2 -ml-4 border border-yellow-600/20"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          
-          {/* Testimonial carousel */}
+        <div className="overflow-hidden">
+          {/* Testimonial carousel - auto scrolling infinite loop */}
           <div
             ref={carouselRef}
-            className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-6 pb-6"
-            style={{ scrollBehavior: 'smooth' }}
+            className="flex overflow-hidden gap-6 pb-6"
           >
             {duplicatedTestimonials.map((testimonial, index) => (
               <motion.div 
                 key={`${testimonial.id}-${index}`}
-                className="dark-card p-6 rounded-lg shadow-lg border border-yellow-600/30 min-w-[300px] md:min-w-[350px] snap-start"
+                className="dark-card p-6 rounded-lg shadow-lg border border-yellow-600/30 min-w-[300px] md:min-w-[350px] flex-shrink-0"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -144,15 +114,6 @@ const TestimonialsSection = () => {
               </motion.div>
             ))}
           </div>
-          
-          {/* Right scroll button */}
-          <button 
-            onClick={scrollRight}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 text-white rounded-full p-2 -mr-4 border border-yellow-600/20"
-            aria-label="Scroll right"
-          >
-            <ChevronRight size={24} />
-          </button>
         </div>
       </div>
     </section>
