@@ -1,0 +1,104 @@
+Phase 1: Frontend + Design Layout
+Frontend Setup:
+
+React – Framework for building interactive UI.
+
+Tailwind CSS – Utility-first CSS for quick styling.
+
+UI Kit – ShadCN UI for components like buttons, forms, modals.
+
+Icons – Lucide icons for interactive elements like buttons.
+
+Animations – Framer Motion for smooth page transitions, hover effects, and scroll animations.
+
+Design:
+
+Color Scheme: Light mode with an elegant color palette. Consider a neutral or muted background color (white/cream), and accent colors (earthy tones or soft pastels) that fit the photography brand.
+
+Typography: Clean, minimal fonts. Consider something like "Roboto" for readability and a more artistic font for the header.
+
+Navigation: Clear navigation with links to Home, Gallery, Services, About, and Contact.
+
+Pages Setup:
+
+Home Page: Welcome message, a hero image showcasing your best photography work.
+
+Gallery Page: Grid layout with clickable images (lightbox for viewing).
+
+Services Page: List of photography services offered, including pricing, packages.
+
+About Page: Introduction, photography style, and personal bio.
+
+Contact Page: Contact form with fields like name, email, subject, and message.
+
+Footer: Social media links, copyright, quick links.
+
+Phase 2: Backend & Database Setup
+Backend:
+
+Supabase – Set up to manage:
+
+User Authentication: Allow customers to create accounts, save favorites, and manage orders.
+
+Gallery Images: Store images and allow them to be categorized (e.g., Weddings, Portraits).
+
+Services: Store different packages and options.
+
+Booking/Orders: Store customer orders, including session date, type, and contact information.
+
+Database Structure:
+
+Users: id, name, email, password, etc.
+
+Gallery: id, image_url, category, description.
+
+Services: id, name, description, price, duration.
+
+Orders: id, user_id, service_id, session_date, status.
+
+Phase 3: Stripe Integration for Booking/Payment
+Stripe Checkout Integration:
+
+Set up a Stripe account and integrate the payment gateway into the website.
+
+Allow users to book a photography session and pay for it via a secure Stripe checkout page.
+
+Track orders in the database (order ID, paym…
+https://www.dropbox.com/scl/fo/7urkks64n6ps1ot8x26dj/APOrgDJLvqjV3veSkYO83ks?rlkey=90graobxa437zk13f3lzzfjmz&st=3dpi71ql&dl=0
+Logo : https://www.dropbox.com/scl/fi/j2xdewynrjqokb75usfz2/hero-background.jpg?rlkey=kkwoihqpo7z5u8gmxwjqo8ary&st=mhxwea0i&dl=0
+Suraj Uni: Birthday photo shoot
+  1 pakej = 14,000
+  2 pakej = 17,500 (10×15 photo and photo frem free)
+couple photo shoot
+ 1 pakej = 15,000
+  2 pakej = 19 ,500 (10×12 fram දෙකක් දෙකනවා )
+වේඩින් shoot 
+    *Full day  එකම වේඩින් එක කවර් කරනව⁣ා නම් =30,000 (  16×24 photo  frem  free)
+*pre shoot 15,000 
+
+pre shoot and Wedding full day shoot  ( 40,000)
+[15/04, 22:35] Suraj Uni: ඉවේන්ට් පැකේජ්
+1 pakej = 20,000 
+2 pakej = 25,000
+3 pakej = 30,000
+
+I’m Suraj Jayashakthi, a Sri Lankan photographer with experience turning fleeting moments into timeless memories. Inspired by the vibrant colors of Horana’s festivals and the joy of Colombo’s weddings, I founded Mr. DarkLense to capture love, laughter, and celebration. Let’s make your story shine through photos you’ll treasure forever.
+
+
+call : +94 70 620 0613
+horana
+social media : https://www.facebook.com/share/12MdUNuDGXN/
+https://www.tiktok.com/@suraj.jayashkthi?_t=ZS-8vYmnbKpXHU&_r=1
+whatsapp : +94 70 620 0613
+Can we do it add my bank details and then client can do payment upload slip like thing
+Sampath Bank
+Horana
+P.D.U SAMPATH
+1057 5268 8022
+Udaras007@gmail.com
+Add testomonilas but it further testomonilas will added by me
+
+can you show me how my website look like or something thing get idea
+https://gnkwckmuolrvwpwtkhgp.supabase.co
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdua3dja211b2xydndwd3RraGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3NDA5NjksImV4cCI6MjA2MDMxNjk2OX0.HQfFU2_zSaVitHtfRretaF9GnP0Tx_FF-ifl7TgDWQI
+vless://0cc4bd51-5e53-4027-8756-44cb4234598e@backupserver.nativelk.top:8080?path=%2F&security=tls&alpn=h3%2Ch2%2Chttp%2F1.1&encryption=none&host=m.zoom.us&fp=chrome&type=ws&sni=m.zoom.us#BACKUP%20SERVERS%20SLT%20ZOOM
