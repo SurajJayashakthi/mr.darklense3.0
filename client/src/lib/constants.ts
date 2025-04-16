@@ -104,9 +104,9 @@ export const TESTIMONIALS = [
 // Navigation links
 export const NAV_LINKS = [
   { href: "#home", label: "Home" },
+  { href: "#about", label: "About" },
   { href: "#gallery", label: "Gallery" },
   { href: "#services", label: "Services" },
-  { href: "#about", label: "About" },
   { href: "#contact", label: "Contact" }
 ];
 
