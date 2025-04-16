@@ -38,9 +38,10 @@ type BookingFormData = z.infer<typeof bookingFormSchema>;
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedService?: string;
 }
 
-const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
+const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   
@@ -50,7 +51,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       name: '',
       email: '',
       phone: '',
-      service: '',
+      service: selectedService || '',
       location: '',
       message: '',
     },

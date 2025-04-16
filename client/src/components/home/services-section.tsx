@@ -5,8 +5,10 @@ import BookingModal from '@/components/booking/booking-modal';
 
 const ServicesSection = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
 
-  const openBookingModal = () => {
+  const openBookingModal = (serviceName: string) => {
+    setSelectedService(serviceName);
     setIsBookingModalOpen(true);
   };
 
@@ -55,7 +57,7 @@ const ServicesSection = () => {
                   </div>
                 </div>
                 <button 
-                  onClick={openBookingModal}
+                  onClick={() => openBookingModal(service.title)}
                   className="block w-full text-center py-2 px-4 gold-button rounded-md transition-colors duration-300"
                 >
                   Book Now
@@ -67,7 +69,11 @@ const ServicesSection = () => {
       </div>
 
       {/* Booking Modal */}
-      <BookingModal isOpen={isBookingModalOpen} onClose={closeBookingModal} />
+      <BookingModal 
+        isOpen={isBookingModalOpen} 
+        onClose={closeBookingModal} 
+        selectedService={selectedService}
+      />
     </section>
   );
 };
