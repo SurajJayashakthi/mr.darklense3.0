@@ -12,6 +12,52 @@ export type GalleryImage = {
   image_url: string;
   category: string;
   description: string;
+  created_at?: string;
+};
+
+// Gallery management functions
+export const uploadGalleryImage = async (file: File, category: string): Promise<GalleryImage> => {
+  const timestamp = new Date().getTime();
+  const filePath = `gallery/${timestamp}-${file.name}`;
+  
+  // Upload to storage
+  const { data: storageData, error: storageError } = await supabase.storage
+    .from('gallery')
+    .upload(filePath, file);
+    
+  if (storageError) throw storageError;
+
+  // Get public URL
+  const { data: { publicUrl } } = supabase.storage
+    .from('gallery')
+    .getPublicUrl(filePath);
+
+  // Insert into gallery table
+  const { data, error } = await supabase
+    .from('gallery')
+    .insert([{
+      image_url: publicUrl,
+      category,
+      description: file.name
+    }])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const fetchGalleryImages = async (category?: string): Promise<GalleryImage[]> => {
+  let query = supabase.from('gallery').select('*');
+  
+  if (category && category !== 'all') {
+    query = query.eq('category', category);
+  }
+  
+  const { data, error } = await query.order('created_at', { ascending: false });
+  
+  if (error) throw error;
+  return data;
 };
 
 export type Service = {

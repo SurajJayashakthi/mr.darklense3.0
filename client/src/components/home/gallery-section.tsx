@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GALLERY_CATEGORIES, GALLERY_IMAGES } from '@/lib/constants';
+import { GALLERY_CATEGORIES } from '@/lib/constants';
 import { useLightbox } from '@/hooks/use-lightbox';
 import Lightbox from '@/components/ui/lightbox';
+import { useQuery } from '@tanstack/react-query';
+import { fetchGalleryImages, type GalleryImage } from '@/lib/supabase';
 
 const GallerySection = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const { isOpen, currentImage, openLightbox, closeLightbox } = useLightbox();
   
-  const filteredImages = activeCategory === 'all' 
-    ? GALLERY_IMAGES 
-    : GALLERY_IMAGES.filter(img => img.category === activeCategory);
+  const { data: images = [] } = useQuery({
+    queryKey: ['gallery', activeCategory],
+    queryFn: () => fetchGalleryImages(activeCategory),
+  });
 
   return (
     <section id="gallery" className="py-16 bg-black">
@@ -51,7 +54,7 @@ const GallerySection = () => {
           transition={{ duration: 0.5 }}
         >
           <AnimatePresence>
-            {filteredImages.map((image) => (
+            {images.map((image) => (
               <motion.div
                 key={image.id}
                 layout
