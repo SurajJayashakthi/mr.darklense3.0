@@ -210,20 +210,23 @@ const ContactSection = () => {
               
               <div className="space-y-6 mb-8">
                 <div>
-                  <h4 className="text-lg font-semibold gold-gradient mb-4">Studio Location</h4>
-                  <p className="text-gray-300">Visit our studio to discuss your photography needs in person and view our portfolio.</p>
-                  <div className="mt-3 bg-gray-800 p-4 rounded-md border border-yellow-600/20">
-                    <p className="text-gray-300">{CONTACT_INFO.location}</p>
-                  </div>
-                </div>
-                
-                <div>
                   <h4 className="text-lg font-semibold gold-gradient mb-4">Business Hours</h4>
                   <div className="space-y-2 text-gray-300">
                     <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
                     <p>Saturday: 10:00 AM - 4:00 PM</p>
                     <p>Sunday: By Appointment Only</p>
                   </div>
+                </div>
+                
+                <div>
+                  <h4 className="text-lg font-semibold gold-gradient mb-4">Photography Packages</h4>
+                  <p className="text-gray-300 mb-3">Various photography packages available for different types of events:</p>
+                  <ul className="list-disc list-inside space-y-1 text-gray-300 ml-2">
+                    <p>• Wedding & Engagement</p>
+                    <p>• Portrait & Family</p>
+                    <p>• Events & Corporate</p>
+                    <p>• Commercial & Product</p>
+                  </ul>
                 </div>
               </div>
               
