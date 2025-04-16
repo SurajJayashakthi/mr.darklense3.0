@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://gnkwckmuolrvwpwtkhgp.supabase.co';
@@ -5,7 +6,7 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Types for future implementation
+// Types 
 export type GalleryImage = {
   id: number;
   image_url: string;
@@ -29,16 +30,36 @@ export type ContactFormData = {
   message: string;
 };
 
-// Future functions for database operations
+// Storage functions
+export const uploadImage = async (file: File, path: string): Promise<string> => {
+  const { data, error } = await supabase.storage
+    .from('gallery')
+    .upload(`${path}/${file.name}`, file);
+
+  if (error) throw error;
+  
+  const { data: { publicUrl } } = supabase.storage
+    .from('gallery')
+    .getPublicUrl(`${path}/${file.name}`);
+    
+  return publicUrl;
+};
+
+export const deleteImage = async (path: string) => {
+  const { error } = await supabase.storage
+    .from('gallery')
+    .remove([path]);
+    
+  if (error) throw error;
+};
+
+// Database functions
 export const fetchGalleryImages = async (): Promise<GalleryImage[]> => {
   const { data, error } = await supabase
     .from('gallery')
     .select('*');
   
-  if (error) {
-    throw new Error(error.message);
-  }
-  
+  if (error) throw error;
   return data as GalleryImage[];
 };
 
@@ -47,9 +68,6 @@ export const submitContactForm = async (formData: ContactFormData) => {
     .from('contact_submissions')
     .insert([formData]);
   
-  if (error) {
-    throw new Error(error.message);
-  }
-  
+  if (error) throw error;
   return data;
 };
