@@ -71,7 +71,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-16">
+    <section id="contact" className="py-16 bg-gray-900">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           className="text-center mb-12"
@@ -80,8 +80,8 @@ const ContactSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">Get In Touch</h2>
-          <p className="text-gray-600 max-w-3xl mx-auto">Have a project in mind? Contact us to discuss your photography needs.</p>
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-4 gold-gradient">Get In Touch</h2>
+          <p className="text-gray-300 max-w-3xl mx-auto">Have a project in mind? Contact us to discuss your photography needs.</p>
         </motion.div>
         
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
@@ -92,7 +92,7 @@ const ContactSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="dark-card p-6 rounded-lg shadow-lg border-2 border-yellow-600/30">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -101,9 +101,9 @@ const ContactSection = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Name</FormLabel>
+                          <FormLabel className="text-gray-300">Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="Your name" {...field} />
+                            <Input placeholder="Your name" {...field} className="bg-gray-800 border-gray-700 text-white" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -115,9 +115,9 @@ const ContactSection = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel className="text-gray-300">Email</FormLabel>
                           <FormControl>
-                            <Input type="email" placeholder="Your email" {...field} />
+                            <Input type="email" placeholder="Your email" {...field} className="bg-gray-800 border-gray-700 text-white" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -130,9 +130,9 @@ const ContactSection = () => {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phone</FormLabel>
+                        <FormLabel className="text-gray-300">Phone</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your phone number" {...field} />
+                          <Input placeholder="Your phone number" {...field} className="bg-gray-800 border-gray-700 text-white" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -144,17 +144,17 @@ const ContactSection = () => {
                     name="service"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Service Interested In</FormLabel>
+                        <FormLabel className="text-gray-300">Service Interested In</FormLabel>
                         <Select 
                           onValueChange={field.onChange} 
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
                               <SelectValue placeholder="Select a service" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent className="bg-gray-800 border-gray-700 text-white">
                             <SelectItem value="none">Select a service</SelectItem>
                             <SelectItem value="wedding">Wedding Photography</SelectItem>
                             <SelectItem value="couple">Couple Photoshoot</SelectItem>
@@ -172,12 +172,13 @@ const ContactSection = () => {
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Message</FormLabel>
+                        <FormLabel className="text-gray-300">Message</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Tell us about your project" 
                             rows={4} 
                             {...field} 
+                            className="bg-gray-800 border-gray-700 text-white"
                           />
                         </FormControl>
                         <FormMessage />
@@ -187,7 +188,7 @@ const ContactSection = () => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-secondary hover:bg-purple-700"
+                    className="w-full gold-button"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Sending..." : "Send Message"}
@@ -204,50 +205,50 @@ const ContactSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="bg-white p-6 rounded-lg shadow-lg h-full">
-              <h3 className="text-2xl font-bold text-primary font-serif mb-6">Payment Details</h3>
-              <p className="text-gray-600 mb-6">For direct bank transfers, please use the following details:</p>
+            <div className="dark-card p-6 rounded-lg shadow-lg h-full border-2 border-yellow-600/30">
+              <h3 className="text-2xl font-bold font-serif mb-6 gold-gradient">Payment Details</h3>
+              <p className="text-gray-300 mb-6">For direct bank transfers, please use the following details:</p>
               
               <div className="space-y-4 mb-8">
                 <div className="flex flex-col">
-                  <span className="text-sm text-gray-500">Bank</span>
-                  <span className="text-primary font-medium">{BANK_DETAILS.bank}</span>
+                  <span className="text-sm text-gray-400">Bank</span>
+                  <span className="gold-gradient font-medium">{BANK_DETAILS.bank}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm text-gray-500">Branch</span>
-                  <span className="text-primary font-medium">{BANK_DETAILS.branch}</span>
+                  <span className="text-sm text-gray-400">Branch</span>
+                  <span className="text-white font-medium">{BANK_DETAILS.branch}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm text-gray-500">Account Name</span>
-                  <span className="text-primary font-medium">{BANK_DETAILS.accountName}</span>
+                  <span className="text-sm text-gray-400">Account Name</span>
+                  <span className="text-white font-medium">{BANK_DETAILS.accountName}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm text-gray-500">Account Number</span>
-                  <span className="text-primary font-medium">{BANK_DETAILS.accountNumber}</span>
+                  <span className="text-sm text-gray-400">Account Number</span>
+                  <span className="gold-gradient font-medium">{BANK_DETAILS.accountNumber}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm text-gray-500">Email</span>
-                  <span className="text-primary font-medium">{BANK_DETAILS.email}</span>
+                  <span className="text-sm text-gray-400">Email</span>
+                  <span className="text-white font-medium">{BANK_DETAILS.email}</span>
                 </div>
               </div>
               
-              <div className="bg-purple-50 p-4 rounded-md mb-6">
-                <p className="text-gray-600 text-sm">After making the payment, please upload your payment slip or confirmation through WhatsApp or email for verification.</p>
+              <div className="bg-gray-800 p-4 rounded-md mb-6 border border-yellow-600/20">
+                <p className="text-gray-300 text-sm">After making the payment, please upload your payment slip or confirmation through WhatsApp or email for verification.</p>
               </div>
               
               <div className="space-y-4">
-                <h4 className="text-lg font-semibold text-primary">Contact Directly</h4>
+                <h4 className="text-lg font-semibold gold-gradient">Contact Directly</h4>
                 <div className="flex items-center space-x-4">
-                  <i className='bx bx-phone text-secondary text-xl'></i>
-                  <span className="text-gray-600">{CONTACT_INFO.phone}</span>
+                  <i className='bx bx-phone gold-gradient text-xl'></i>
+                  <span className="text-gray-300">{CONTACT_INFO.phone}</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <i className='bx bx-envelope text-secondary text-xl'></i>
-                  <span className="text-gray-600">{CONTACT_INFO.email}</span>
+                  <i className='bx bx-envelope gold-gradient text-xl'></i>
+                  <span className="text-gray-300">{CONTACT_INFO.email}</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <i className='bx bx-map text-secondary text-xl'></i>
-                  <span className="text-gray-600">{CONTACT_INFO.location}</span>
+                  <i className='bx bx-map gold-gradient text-xl'></i>
+                  <span className="text-gray-300">{CONTACT_INFO.location}</span>
                 </div>
                 
                 <div className="flex items-center space-x-4 pt-4">
@@ -255,7 +256,7 @@ const ContactSection = () => {
                     href={SOCIAL_LINKS.facebook} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-primary hover:text-secondary transition-colors duration-300"
+                    className="text-white hover-gold"
                     aria-label="Facebook"
                   >
                     <i className='bx bxl-facebook text-2xl'></i>
@@ -264,7 +265,7 @@ const ContactSection = () => {
                     href={SOCIAL_LINKS.tiktok} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-primary hover:text-secondary transition-colors duration-300"
+                    className="text-white hover-gold"
                     aria-label="TikTok"
                   >
                     <i className='bx bxl-tiktok text-2xl'></i>
@@ -273,7 +274,7 @@ const ContactSection = () => {
                     href={SOCIAL_LINKS.whatsapp} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-primary hover:text-secondary transition-colors duration-300"
+                    className="text-white hover-gold"
                     aria-label="WhatsApp"
                   >
                     <i className='bx bxl-whatsapp text-2xl'></i>
