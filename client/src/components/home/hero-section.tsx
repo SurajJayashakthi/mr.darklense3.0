@@ -1,8 +1,20 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import BookingModal from '@/components/booking/booking-modal';
 
 const HeroSection = () => {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
+  const openBookingModal = () => {
+    setIsBookingModalOpen(true);
+  };
+
+  const closeBookingModal = () => {
+    setIsBookingModalOpen(false);
+  };
+
   return (
-    <section id="home" className="pt-24 md:pt-32 pb-16 md:pb-24">
+    <section id="home" className="pt-24 md:pt-32 pb-16 md:pb-24 bg-gray-900">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
           <motion.div 
@@ -11,25 +23,25 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-primary font-serif">
-              Capturing Life's <span className="text-secondary">Beautiful</span> Moments
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-serif">
+              Capturing Life's <span className="gold-gradient">Beautiful</span> Moments
             </h1>
-            <p className="text-lg text-gray-600 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               Specialized in weddings, portraits, and events photography. Let's create timeless memories together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <a 
                 href="#services" 
-                className="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-secondary hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-colors duration-300"
+                className="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm gold-button"
               >
                 View Packages
               </a>
-              <a 
-                href="#contact" 
-                className="inline-flex justify-center items-center px-6 py-3 border border-secondary text-base font-medium rounded-md text-secondary bg-transparent hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary transition-colors duration-300"
+              <button 
+                onClick={openBookingModal}
+                className="inline-flex justify-center items-center px-6 py-3 border border-yellow-600 text-base font-medium rounded-md text-white bg-transparent hover:bg-gray-800 hover:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all duration-300"
               >
                 Book a Session
-              </a>
+              </button>
             </div>
           </motion.div>
           
@@ -39,7 +51,8 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="relative overflow-hidden rounded-lg shadow-xl">
+            <div className="relative overflow-hidden rounded-lg shadow-2xl border-2 border-yellow-600/30">
+              <div className="absolute inset-0 bg-gradient-to-tr from-yellow-600/20 to-transparent pointer-events-none z-10"></div>
               <img 
                 src="https://images.unsplash.com/photo-1581591524425-c7e0978865fc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
                 alt="Professional photographer in action" 
@@ -49,6 +62,9 @@ const HeroSection = () => {
           </motion.div>
         </div>
       </div>
+      
+      {/* Booking Modal */}
+      <BookingModal isOpen={isBookingModalOpen} onClose={closeBookingModal} />
     </section>
   );
 };

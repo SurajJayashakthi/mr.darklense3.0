@@ -13,7 +13,7 @@ const GallerySection = () => {
     : GALLERY_IMAGES.filter(img => img.category === activeCategory);
 
   return (
-    <section id="gallery" className="py-16 bg-neutral-light">
+    <section id="gallery" className="py-16 bg-black">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           className="text-center mb-12"
@@ -22,8 +22,8 @@ const GallerySection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">Photo Gallery</h2>
-          <p className="text-gray-600 max-w-3xl mx-auto">Browse through our collection of memorable moments.</p>
+          <h2 className="text-3xl md:text-4xl font-bold font-serif mb-4 gold-gradient">Photo Gallery</h2>
+          <p className="text-gray-300 max-w-3xl mx-auto">Browse through our collection of memorable moments.</p>
         </motion.div>
         
         {/* Gallery Categories */}
@@ -31,10 +31,10 @@ const GallerySection = () => {
           {GALLERY_CATEGORIES.map((category) => (
             <button 
               key={category.id}
-              className={`px-4 py-2 rounded-md focus:outline-none transition-colors duration-300 ${
+              className={`px-4 py-2 rounded-md focus:outline-none transition-all duration-300 ${
                 activeCategory === category.id
-                  ? 'bg-secondary text-white'
-                  : 'bg-white text-primary hover:bg-purple-100'
+                  ? 'gold-button'
+                  : 'bg-gray-800 text-white hover:bg-gray-700 border border-yellow-600/30'
               }`}
               onClick={() => setActiveCategory(category.id)}
             >
@@ -59,13 +59,13 @@ const GallerySection = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.3 }}
-                className="gallery-image overflow-hidden rounded-lg cursor-pointer"
+                className="gallery-image overflow-hidden rounded-lg cursor-pointer border-2 border-yellow-600/30 shadow-lg shadow-yellow-500/10"
                 onClick={() => openLightbox({ src: image.image, alt: image.alt })}
               >
                 <img 
                   src={image.image} 
                   alt={image.alt} 
-                  className="w-full h-64 object-cover transition-transform duration-500 hover:scale-110" 
+                  className="w-full h-64 object-cover transition-all duration-500 hover:scale-110 hover:brightness-110" 
                 />
               </motion.div>
             ))}
