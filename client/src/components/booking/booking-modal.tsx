@@ -213,7 +213,7 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                   
                   <div>
                     <Label htmlFor="package" className="text-gray-300">Select Package</Label>
-                    <div className="grid grid-cols-2 gap-4 mt-1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
                       {form.watch('service') && SERVICES.find(s => s.title === form.watch('service'))?.packages.map((pkg, index) => (
                         <div 
                           key={index}

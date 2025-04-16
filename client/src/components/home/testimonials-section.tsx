@@ -4,6 +4,8 @@ import { TESTIMONIALS } from '@/lib/constants';
 
 import React, { useState } from 'react';
 
+import { useState } from 'react';
+
 const TestimonialsSection = () => {
   // Double the testimonials for infinite scrolling effect
   const duplicatedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
