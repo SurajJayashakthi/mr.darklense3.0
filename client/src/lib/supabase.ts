@@ -99,16 +99,6 @@ export const deleteImage = async (path: string) => {
   if (error) throw error;
 };
 
-// Database functions
-export const fetchGalleryImages = async (): Promise<GalleryImage[]> => {
-  const { data, error } = await supabase
-    .from('gallery')
-    .select('*');
-  
-  if (error) throw error;
-  return data as GalleryImage[];
-};
-
 export const submitContactForm = async (formData: ContactFormData) => {
   const { data, error } = await supabase
     .from('contact_submissions')
