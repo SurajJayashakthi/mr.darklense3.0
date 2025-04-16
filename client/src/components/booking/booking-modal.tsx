@@ -25,6 +25,7 @@ const bookingFormSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
   phone: z.string().min(8, { message: 'Please provide a valid phone number' }),
   service: z.string().min(1, { message: 'Please select a service' }),
+  package: z.string().min(1, { message: 'Please select a package' }),
   date: z.date({
     required_error: 'Please select a date',
   }),
@@ -52,6 +53,7 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
       email: '',
       phone: '',
       service: selectedService || '',
+      package: '',
       location: '',
       message: '',
     },
@@ -195,7 +197,7 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                               <span>{service.title}</span>
                               <span className="ml-auto text-sm text-gray-400">
                                 {service.packages && service.packages.length > 0 ? 
-                                  `$${service.packages[0].price}+` : 
+                                  `Rs. ${service.packages[0].price}+` : 
                                   "Custom pricing"}
                               </span>
                             </div>
@@ -206,6 +208,39 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                     {form.formState.errors.service && (
                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.service.message}</p>
                     )}
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="package" className="text-gray-300">Select Package</Label>
+                    <div className="grid grid-cols-2 gap-4 mt-1">
+                      {form.watch('service') && SERVICES.find(s => s.title === form.watch('service'))?.packages.map((pkg, index) => (
+                        <div 
+                          key={index}
+                          onClick={() => form.setValue('package', pkg.name)}
+                          className={`
+                            cursor-pointer p-4 rounded-md border 
+                            ${form.watch('package') === pkg.name 
+                              ? 'border-yellow-500 bg-yellow-600/10' 
+                              : 'border-gray-700 bg-gray-800 hover:border-yellow-600/50'
+                            }
+                            transition-colors
+                          `}
+                        >
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-medium text-white">{pkg.name}</span>
+                            <span className="gold-gradient font-bold">Rs. {pkg.price}</span>
+                          </div>
+                          <div className="text-sm text-gray-400">
+                            {pkg.features?.map((feature, i) => (
+                              <div key={i} className="flex items-center">
+                                <i className='bx bx-check text-yellow-500 mr-1'></i>
+                                <span>{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

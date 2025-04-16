@@ -12,7 +12,7 @@ const TestimonialsSection = () => {
   useEffect(() => {
     let animationFrameId: number;
     let lastTimestamp = 0;
-    const scrollSpeed = 0.5; // pixels per millisecond
+    const scrollSpeed = 0.1; // pixels per millisecond - reduced for slower scrolling
     
     const scrollCarousel = (timestamp: number) => {
       if (!lastTimestamp) lastTimestamp = timestamp;

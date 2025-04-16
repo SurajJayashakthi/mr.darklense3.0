@@ -28,8 +28,25 @@ export const SERVICES = [
     title: "Birthday Photo Shoot",
     icon: "bx-gift",
     packages: [
-      { name: "Package 1", price: "14,000" },
-      { name: "Package 2", price: "17,500" }
+      { 
+        name: "Package 1", 
+        price: "14,000",
+        features: [
+          "2-3 hour shoot",
+          "25 edited digital photos",
+          "Online gallery"
+        ]
+      },
+      { 
+        name: "Package 2", 
+        price: "17,500",
+        features: [
+          "3-4 hour shoot",
+          "40 edited digital photos",
+          "Online gallery",
+          "10×15 photo and frame"
+        ]
+      }
     ],
     description: "Package 2 includes 10×15 photo and photo frame free"
   },
@@ -38,8 +55,27 @@ export const SERVICES = [
     title: "Couple Photo Shoot",
     icon: "bx-heart",
     packages: [
-      { name: "Package 1", price: "15,000" },
-      { name: "Package 2", price: "19,500" }
+      { 
+        name: "Package 1", 
+        price: "15,000",
+        features: [
+          "2-3 hour shoot",
+          "30 edited digital photos",
+          "Online gallery",
+          "1 location"
+        ]
+      },
+      { 
+        name: "Package 2", 
+        price: "19,500",
+        features: [
+          "4-5 hour shoot",
+          "50 edited digital photos",
+          "Online gallery",
+          "2 locations",
+          "Two 10×12 photo frames"
+        ]
+      }
     ],
     description: "Package 2 includes two 10×12 photo frames"
   },
