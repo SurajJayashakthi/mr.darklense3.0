@@ -26,6 +26,7 @@ const bookingFormSchema = z.object({
   phone: z.string().min(8, { message: 'Please provide a valid phone number' }),
   service: z.string().min(1, { message: 'Please select a service' }),
   package: z.string().min(1, { message: 'Please select a package' }),
+  packagePrice: z.number().optional(),
   date: z.date({
     required_error: 'Please select a date',
   }),
@@ -216,7 +217,10 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                       {form.watch('service') && SERVICES.find(s => s.title === form.watch('service'))?.packages.map((pkg, index) => (
                         <div 
                           key={index}
-                          onClick={() => form.setValue('package', pkg.name)}
+                          onClick={() => {
+                            form.setValue('package', pkg.name);
+                            form.setValue('packagePrice', pkg.price);
+                          }}
                           className={`
                             cursor-pointer p-4 rounded-md border 
                             ${form.watch('package') === pkg.name 
@@ -343,6 +347,8 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                     <div className="space-y-2 text-gray-300">
                       <p><span className="text-gray-400">Name:</span> {bookingData?.name}</p>
                       <p><span className="text-gray-400">Service:</span> {bookingData?.service}</p>
+                      <p><span className="text-gray-400">Package:</span> {bookingData?.package}</p>
+                      <p><span className="text-gray-400">Price:</span> Rs. {bookingData?.packagePrice}</p>
                       <p><span className="text-gray-400">Date:</span> {bookingData?.date ? format(bookingData.date, 'PPP') : ''}</p>
                       <p><span className="text-gray-400">Time:</span> {bookingData?.time}</p>
                       <p><span className="text-gray-400">Location:</span> {bookingData?.location}</p>
