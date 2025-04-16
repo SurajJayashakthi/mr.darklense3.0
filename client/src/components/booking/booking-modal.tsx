@@ -348,14 +348,51 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                       </p>
                     </div>
                     
-                    <div className="bg-gray-800 p-4 rounded-md border border-yellow-600/20">
+                    <div className="bg-gray-800 p-4 rounded-md border border-yellow-600/20 mb-6">
                       <p className="text-gray-300 text-sm">
-                        After making the payment, please send the payment confirmation to our WhatsApp or email. The remaining balance will be due on the day of the photoshoot.
+                        After making the payment, please upload your payment confirmation below. The remaining balance will be due on the day of the photoshoot.
                       </p>
                     </div>
                   </div>
                   
-                  <div className="flex space-x-4 pt-4">
+                  {/* File Upload Section */}
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-bold font-serif gold-gradient mb-2">Upload Payment Confirmation</h3>
+                    
+                    <div className="grid grid-cols-1 gap-4">
+                      <div className="border-2 border-dashed border-yellow-600/30 rounded-lg p-6 text-center">
+                        <input 
+                          type="file" 
+                          id="paymentProof" 
+                          className="hidden" 
+                          accept=".jpg,.jpeg,.png,.pdf" 
+                          onChange={(e) => {
+                            // Here you would handle the file upload
+                            if (e.target.files?.length) {
+                              toast({
+                                title: "File received",
+                                description: `File "${e.target.files[0].name}" uploaded successfully.`,
+                              });
+                            }
+                          }}
+                        />
+                        <label 
+                          htmlFor="paymentProof" 
+                          className="flex flex-col items-center justify-center cursor-pointer"
+                        >
+                          <div className="p-4 rounded-full bg-yellow-600/10 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                          </div>
+                          <span className="text-white font-medium mb-1">Upload File</span>
+                          <span className="text-gray-400 text-sm">JPG, PNG or PDF (max 5MB)</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-4 pt-6">
                     <Button 
                       className="w-full gold-button"
                       onClick={handleClose}

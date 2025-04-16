@@ -12,7 +12,7 @@ import { useScrollSpy } from '@/hooks/use-scroll-spy';
 
 const HomePage = () => {
   // Track active section for navigation highlighting
-  const sections = ['home', 'gallery', 'services', 'about', 'contact'];
+  const sections = ['home', 'about', 'gallery', 'services', 'contact'];
   const activeSection = useScrollSpy(sections);
   
   // Set page title
@@ -27,9 +27,9 @@ const HomePage = () => {
       <main>
         <HeroSection />
         <FeaturedWork />
-        <ServicesSection />
-        <GallerySection />
         <AboutSection />
+        <GallerySection />
+        <ServicesSection />
         <TestimonialsSection />
         <ContactSection />
       </main>

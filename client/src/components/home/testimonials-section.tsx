@@ -10,27 +10,59 @@ const TestimonialsSection = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
   
-  // Auto scroll effect
+  // Auto scroll effect with better performance
   useEffect(() => {
-    const interval = setInterval(() => {
+    let animationFrameId: number;
+    let lastTimestamp = 0;
+    const scrollSpeed = 0.5; // pixels per millisecond
+    
+    const scrollCarousel = (timestamp: number) => {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const elapsed = timestamp - lastTimestamp;
+      
       if (carouselRef.current) {
-        setScrollPosition((prevPosition) => {
-          const newPosition = prevPosition + 1;
-          // Reset position once we've scrolled through the original set
-          if (newPosition >= TESTIMONIALS.length * 300) {
-            return 0;
-          }
-          return newPosition;
-        });
+        // Calculate how far to scroll based on elapsed time
+        const scrollAmount = scrollSpeed * elapsed;
+        carouselRef.current.scrollLeft += scrollAmount;
         
-        if (carouselRef.current) {
-          carouselRef.current.scrollLeft = scrollPosition;
+        // If we've scrolled to the end of the first set, jump back to start
+        const totalWidth = carouselRef.current.scrollWidth / 2;
+        if (carouselRef.current.scrollLeft >= totalWidth) {
+          carouselRef.current.scrollLeft = 0;
         }
       }
-    }, 30); // Smooth scrolling
+      
+      lastTimestamp = timestamp;
+      animationFrameId = requestAnimationFrame(scrollCarousel);
+    };
     
-    return () => clearInterval(interval);
-  }, [scrollPosition]);
+    // Start the animation
+    animationFrameId = requestAnimationFrame(scrollCarousel);
+    
+    // Pause scrolling when user interacts with the carousel
+    const handleMouseEnter = () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+    
+    const handleMouseLeave = () => {
+      lastTimestamp = 0;
+      animationFrameId = requestAnimationFrame(scrollCarousel);
+    };
+    
+    const carousel = carouselRef.current;
+    if (carousel) {
+      carousel.addEventListener('mouseenter', handleMouseEnter);
+      carousel.addEventListener('mouseleave', handleMouseLeave);
+    }
+    
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (carousel) {
+        carousel.removeEventListener('mouseenter', handleMouseEnter);
+        carousel.removeEventListener('mouseleave', handleMouseLeave);
+      }
+    };
+  }, []);
   
   const scrollLeft = () => {
     if (carouselRef.current) {

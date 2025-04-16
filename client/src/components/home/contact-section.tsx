@@ -206,34 +206,25 @@ const ContactSection = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="dark-card p-6 rounded-lg shadow-lg h-full border-2 border-yellow-600/30">
-              <h3 className="text-2xl font-bold font-serif mb-6 gold-gradient">Payment Details</h3>
-              <p className="text-gray-300 mb-6">For direct bank transfers, please use the following details:</p>
+              <h3 className="text-2xl font-bold font-serif mb-6 gold-gradient">Contact Information</h3>
               
-              <div className="space-y-4 mb-8">
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-400">Bank</span>
-                  <span className="gold-gradient font-medium">{BANK_DETAILS.bank}</span>
+              <div className="space-y-6 mb-8">
+                <div>
+                  <h4 className="text-lg font-semibold gold-gradient mb-4">Studio Location</h4>
+                  <p className="text-gray-300">Visit our studio to discuss your photography needs in person and view our portfolio.</p>
+                  <div className="mt-3 bg-gray-800 p-4 rounded-md border border-yellow-600/20">
+                    <p className="text-gray-300">{CONTACT_INFO.location}</p>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-400">Branch</span>
-                  <span className="text-white font-medium">{BANK_DETAILS.branch}</span>
+                
+                <div>
+                  <h4 className="text-lg font-semibold gold-gradient mb-4">Business Hours</h4>
+                  <div className="space-y-2 text-gray-300">
+                    <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                    <p>Saturday: 10:00 AM - 4:00 PM</p>
+                    <p>Sunday: By Appointment Only</p>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-400">Account Name</span>
-                  <span className="text-white font-medium">{BANK_DETAILS.accountName}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-400">Account Number</span>
-                  <span className="gold-gradient font-medium">{BANK_DETAILS.accountNumber}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-400">Email</span>
-                  <span className="text-white font-medium">{BANK_DETAILS.email}</span>
-                </div>
-              </div>
-              
-              <div className="bg-gray-800 p-4 rounded-md mb-6 border border-yellow-600/20">
-                <p className="text-gray-300 text-sm">After making the payment, please upload your payment slip or confirmation through WhatsApp or email for verification.</p>
               </div>
               
               <div className="space-y-4">
