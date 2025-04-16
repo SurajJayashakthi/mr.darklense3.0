@@ -84,9 +84,38 @@ export const SERVICES = [
     title: "Wedding Photo Shoot",
     icon: "bx-calendar-heart",
     packages: [
-      { name: "Full day", price: "30,000" },
-      { name: "Pre-shoot", price: "15,000" },
-      { name: "Pre + Full day", price: "40,000" }
+      { 
+        name: "Full day", 
+        price: "30,000",
+        features: [
+          "8-10 hour coverage",
+          "200+ edited digital photos",
+          "Private online gallery",
+          "One 16×24 photo frame",
+          "Highlight slideshow"
+        ]
+      },
+      { 
+        name: "Pre-shoot", 
+        price: "15,000",
+        features: [
+          "3-4 hour shoot",
+          "50 edited digital photos",
+          "Online gallery",
+          "Multiple locations"
+        ] 
+      },
+      { 
+        name: "Pre + Full day", 
+        price: "40,000",
+        features: [
+          "Pre-shoot package",
+          "Full day package",
+          "Wedding album (20 pages)",
+          "2 parent albums",
+          "Special discount"
+        ] 
+      }
     ],
     description: "Full day includes 16×24 photo frame free"
   },
