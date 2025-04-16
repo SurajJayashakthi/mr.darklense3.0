@@ -16,8 +16,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 
-// Services data
-import { SERVICES } from '@/lib/constants'; 
+// Services data and bank details
+import { SERVICES, BANK_DETAILS } from '@/lib/constants'; 
 
 // Schema for booking form
 const bookingFormSchema = z.object({
@@ -56,6 +56,9 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     },
   });
 
+  const [bookingSubmitted, setBookingSubmitted] = useState(false);
+  const [bookingData, setBookingData] = useState<BookingFormData | null>(null);
+  
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
     
@@ -66,21 +69,29 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
       
       toast({
         title: "Booking Request Submitted",
-        description: "We'll contact you shortly to confirm your session.",
+        description: "Please check the payment details to complete your booking.",
       });
       
-      // Reset form and close modal
-      form.reset();
-      onClose();
+      // Store booking data and show payment details
+      setBookingData(data);
+      setBookingSubmitted(true);
+      setIsSubmitting(false);
     } catch (error) {
       toast({
         title: "Something went wrong",
         description: "Your booking couldn't be submitted. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsSubmitting(false);
     }
+  };
+  
+  const handleClose = () => {
+    // Reset everything when closing
+    form.reset();
+    setBookingSubmitted(false);
+    setBookingData(null);
+    onClose();
   };
 
   // Time slots available for booking
@@ -88,6 +99,8 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
     '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', 
     '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'
   ];
+
+  // BANK_DETAILS is already imported at the top
 
   return (
     <AnimatePresence>
@@ -98,7 +111,7 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black bg-opacity-80"
-            onClick={onClose}
+            onClick={handleClose}
           />
           
           <motion.div 
@@ -111,9 +124,11 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
           >
             <div className="p-6 sm:p-8">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold font-serif gold-gradient">Book a Photography Session</h2>
+                <h2 className="text-2xl font-bold font-serif gold-gradient">
+                  {bookingSubmitted ? "Complete Your Booking" : "Book a Photography Session"}
+                </h2>
                 <button 
-                  onClick={onClose}
+                  onClick={handleClose}
                   className="text-gray-400 hover:text-white transition-colors"
                   aria-label="Close booking modal"
                 >
@@ -121,165 +136,235 @@ const BookingModal = ({ isOpen, onClose }: BookingModalProps) => {
                 </button>
               </div>
               
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {!bookingSubmitted ? (
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="name" className="text-gray-300">Full Name</Label>
+                      <Input 
+                        id="name"
+                        placeholder="Enter your name"
+                        {...form.register('name')}
+                        className="bg-gray-800 border-gray-700 text-white mt-1"
+                      />
+                      {form.formState.errors.name && (
+                        <p className="text-red-500 text-sm mt-1">{form.formState.errors.name.message}</p>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="email" className="text-gray-300">Email</Label>
+                      <Input 
+                        id="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        {...form.register('email')}
+                        className="bg-gray-800 border-gray-700 text-white mt-1"
+                      />
+                      {form.formState.errors.email && (
+                        <p className="text-red-500 text-sm mt-1">{form.formState.errors.email.message}</p>
+                      )}
+                    </div>
+                  </div>
+                  
                   <div>
-                    <Label htmlFor="name" className="text-gray-300">Full Name</Label>
+                    <Label htmlFor="phone" className="text-gray-300">Phone Number</Label>
                     <Input 
-                      id="name"
-                      placeholder="Enter your name"
-                      {...form.register('name')}
+                      id="phone"
+                      placeholder="Enter your phone number"
+                      {...form.register('phone')}
                       className="bg-gray-800 border-gray-700 text-white mt-1"
                     />
-                    {form.formState.errors.name && (
-                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.name.message}</p>
+                    {form.formState.errors.phone && (
+                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.phone.message}</p>
                     )}
                   </div>
                   
                   <div>
-                    <Label htmlFor="email" className="text-gray-300">Email</Label>
-                    <Input 
-                      id="email"
-                      type="email"
-                      placeholder="Enter your email"
-                      {...form.register('email')}
-                      className="bg-gray-800 border-gray-700 text-white mt-1"
-                    />
-                    {form.formState.errors.email && (
-                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.email.message}</p>
-                    )}
-                  </div>
-                </div>
-                
-                <div>
-                  <Label htmlFor="phone" className="text-gray-300">Phone Number</Label>
-                  <Input 
-                    id="phone"
-                    placeholder="Enter your phone number"
-                    {...form.register('phone')}
-                    className="bg-gray-800 border-gray-700 text-white mt-1"
-                  />
-                  {form.formState.errors.phone && (
-                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.phone.message}</p>
-                  )}
-                </div>
-                
-                <div>
-                  <Label htmlFor="service" className="text-gray-300">Select Service</Label>
-                  <Select onValueChange={(value) => form.setValue('service', value)}>
-                    <SelectTrigger className="bg-gray-800 border-gray-700 text-white mt-1">
-                      <SelectValue placeholder="Choose a service" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                      {SERVICES.map((service) => (
-                        <SelectItem key={service.id} value={service.name}>
-                          <div className="flex items-center">
-                            <Camera className="mr-2 h-4 w-4 text-yellow-500" />
-                            <span>{service.name}</span>
-                            <span className="ml-auto text-sm text-gray-400">${service.price}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {form.formState.errors.service && (
-                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.service.message}</p>
-                  )}
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <Label className="text-gray-300 block mb-1">Preferred Date</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="bg-gray-800 border-gray-700 text-white w-full justify-start"
-                        >
-                          <Calendar className="mr-2 h-4 w-4 text-yellow-500" />
-                          {form.watch('date') ? (
-                            format(form.watch('date'), 'PPP')
-                          ) : (
-                            <span>Select date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 bg-gray-800 border-gray-700">
-                        <CalendarComponent
-                          mode="single"
-                          selected={form.watch('date')}
-                          onSelect={(date) => date && form.setValue('date', date)}
-                          initialFocus
-                          className="text-white"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {form.formState.errors.date && (
-                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.date.message as string}</p>
-                    )}
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="time" className="text-gray-300">Preferred Time</Label>
-                    <Select onValueChange={(value) => form.setValue('time', value)}>
+                    <Label htmlFor="service" className="text-gray-300">Select Service</Label>
+                    <Select onValueChange={(value) => form.setValue('service', value)}>
                       <SelectTrigger className="bg-gray-800 border-gray-700 text-white mt-1">
-                        <SelectValue placeholder="Select time" />
+                        <SelectValue placeholder="Choose a service" />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-800 border-gray-700 text-white">
-                        {timeSlots.map((time) => (
-                          <SelectItem key={time} value={time}>
+                        {SERVICES.map((service) => (
+                          <SelectItem key={service.id} value={service.title}>
                             <div className="flex items-center">
-                              <Clock className="mr-2 h-4 w-4 text-yellow-500" />
-                              <span>{time}</span>
+                              <Camera className="mr-2 h-4 w-4 text-yellow-500" />
+                              <span>{service.title}</span>
+                              <span className="ml-auto text-sm text-gray-400">
+                                {service.packages && service.packages.length > 0 ? 
+                                  `$${service.packages[0].price}+` : 
+                                  "Custom pricing"}
+                              </span>
                             </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    {form.formState.errors.time && (
-                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.time.message}</p>
+                    {form.formState.errors.service && (
+                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.service.message}</p>
                     )}
                   </div>
-                </div>
-                
-                <div>
-                  <Label htmlFor="location" className="text-gray-300">Shoot Location</Label>
-                  <Input 
-                    id="location"
-                    placeholder="Enter the location for your photo shoot"
-                    {...form.register('location')}
-                    className="bg-gray-800 border-gray-700 text-white mt-1"
-                  />
-                  {form.formState.errors.location && (
-                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.location.message}</p>
-                  )}
-                </div>
-                
-                <div>
-                  <Label htmlFor="message" className="text-gray-300">Additional Information</Label>
-                  <Textarea 
-                    id="message"
-                    placeholder="Any special requests or details about your shoot"
-                    {...form.register('message')}
-                    rows={3}
-                    className="bg-gray-800 border-gray-700 text-white mt-1"
-                  />
-                </div>
-                
-                <div>
-                  <Button 
-                    type="submit" 
-                    className="w-full gold-button"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Submitting..." : "Book Now"}
-                  </Button>
                   
-                  <p className="text-gray-400 text-sm text-center mt-4">
-                    By booking, you agree to our terms and cancellation policy.
-                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <Label className="text-gray-300 block mb-1">Preferred Date</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="bg-gray-800 border-gray-700 text-white w-full justify-start"
+                          >
+                            <Calendar className="mr-2 h-4 w-4 text-yellow-500" />
+                            {form.watch('date') ? (
+                              format(form.watch('date'), 'PPP')
+                            ) : (
+                              <span>Select date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 bg-gray-800 border-gray-700">
+                          <CalendarComponent
+                            mode="single"
+                            selected={form.watch('date')}
+                            onSelect={(date) => date && form.setValue('date', date)}
+                            initialFocus
+                            className="text-white"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      {form.formState.errors.date && (
+                        <p className="text-red-500 text-sm mt-1">{form.formState.errors.date.message as string}</p>
+                      )}
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="time" className="text-gray-300">Preferred Time</Label>
+                      <Select onValueChange={(value) => form.setValue('time', value)}>
+                        <SelectTrigger className="bg-gray-800 border-gray-700 text-white mt-1">
+                          <SelectValue placeholder="Select time" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-800 border-gray-700 text-white">
+                          {timeSlots.map((time) => (
+                            <SelectItem key={time} value={time}>
+                              <div className="flex items-center">
+                                <Clock className="mr-2 h-4 w-4 text-yellow-500" />
+                                <span>{time}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {form.formState.errors.time && (
+                        <p className="text-red-500 text-sm mt-1">{form.formState.errors.time.message}</p>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="location" className="text-gray-300">Shoot Location</Label>
+                    <Input 
+                      id="location"
+                      placeholder="Enter the location for your photo shoot"
+                      {...form.register('location')}
+                      className="bg-gray-800 border-gray-700 text-white mt-1"
+                    />
+                    {form.formState.errors.location && (
+                      <p className="text-red-500 text-sm mt-1">{form.formState.errors.location.message}</p>
+                    )}
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="message" className="text-gray-300">Additional Information</Label>
+                    <Textarea 
+                      id="message"
+                      placeholder="Any special requests or details about your shoot"
+                      {...form.register('message')}
+                      rows={3}
+                      className="bg-gray-800 border-gray-700 text-white mt-1"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Button 
+                      type="submit" 
+                      className="w-full gold-button"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Submitting..." : "Book Now"}
+                    </Button>
+                    
+                    <p className="text-gray-400 text-sm text-center mt-4">
+                      By booking, you agree to our terms and cancellation policy.
+                    </p>
+                  </div>
+                </form>
+              ) : (
+                <div className="space-y-6">
+                  <div className="p-4 bg-yellow-500/10 border border-yellow-600/30 rounded-md">
+                    <h3 className="text-lg font-bold text-white mb-2">Booking Details</h3>
+                    <div className="space-y-2 text-gray-300">
+                      <p><span className="text-gray-400">Name:</span> {bookingData?.name}</p>
+                      <p><span className="text-gray-400">Service:</span> {bookingData?.service}</p>
+                      <p><span className="text-gray-400">Date:</span> {bookingData?.date ? format(bookingData.date, 'PPP') : ''}</p>
+                      <p><span className="text-gray-400">Time:</span> {bookingData?.time}</p>
+                      <p><span className="text-gray-400">Location:</span> {bookingData?.location}</p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-bold font-serif gold-gradient mb-4">Payment Information</h3>
+                    <p className="text-gray-300 mb-4">
+                      To secure your booking, please make a deposit of 50% of the session fee using the following bank details:
+                    </p>
+                    
+                    <div className="space-y-4 mb-6 bg-gray-800 p-4 rounded-md border border-yellow-600/30">
+                      <div className="flex flex-col">
+                        <span className="text-sm text-gray-400">Bank</span>
+                        <span className="gold-gradient font-medium">{BANK_DETAILS.bank}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm text-gray-400">Branch</span>
+                        <span className="text-white font-medium">{BANK_DETAILS.branch}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm text-gray-400">Account Name</span>
+                        <span className="text-white font-medium">{BANK_DETAILS.accountName}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm text-gray-400">Account Number</span>
+                        <span className="gold-gradient font-medium">{BANK_DETAILS.accountNumber}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm text-gray-400">Email</span>
+                        <span className="text-white font-medium">{BANK_DETAILS.email}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-800 p-4 rounded-md border border-yellow-600/20 mb-6">
+                      <p className="text-gray-300 text-sm">
+                        <span className="gold-gradient font-bold">Payment Reference:</span> Please use your name and session date as the payment reference (e.g., JohnDoe-15Apr2025).
+                      </p>
+                    </div>
+                    
+                    <div className="bg-gray-800 p-4 rounded-md border border-yellow-600/20">
+                      <p className="text-gray-300 text-sm">
+                        After making the payment, please send the payment confirmation to our WhatsApp or email. The remaining balance will be due on the day of the photoshoot.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-4 pt-4">
+                    <Button 
+                      className="w-full gold-button"
+                      onClick={handleClose}
+                    >
+                      Close
+                    </Button>
+                  </div>
                 </div>
-              </form>
+              )}
             </div>
           </motion.div>
         </div>
