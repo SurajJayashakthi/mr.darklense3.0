@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS } from '@/lib/constants';
 
+import React, { useState } from 'react';
+
 const TestimonialsSection = () => {
   // Double the testimonials for infinite scrolling effect
   const duplicatedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
