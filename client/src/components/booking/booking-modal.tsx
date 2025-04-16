@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -17,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 
 // Services data and bank details
-import { SERVICES, BANK_DETAILS } from '@/lib/constants'; 
+import { SERVICES, BANK_DETAILS } from '@/lib/constants';
 
 // Schema for booking form
 const bookingFormSchema = z.object({
@@ -45,8 +46,10 @@ interface BookingModalProps {
 
 const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bookingSubmitted, setBookingSubmitted] = useState(false);
+  const [bookingData, setBookingData] = useState<BookingFormData | null>(null);
   const { toast } = useToast();
-  
+
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
@@ -60,38 +63,28 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
     },
   });
 
-  const [bookingSubmitted, setBookingSubmitted] = useState(false);
-  const [bookingData, setBookingData] = useState<BookingFormData | null>(null);
-  
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
-    
     try {
-      // Here we would normally call an API endpoint to save the booking
-      // For now, we'll just simulate an API call with a delay
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      setBookingData(data);
+      setBookingSubmitted(true);
       toast({
         title: "Booking Request Submitted",
         description: "Please check the payment details to complete your booking.",
       });
-      
-      // Store booking data and show payment details
-      setBookingData(data);
-      setBookingSubmitted(true);
-      setIsSubmitting(false);
     } catch (error) {
       toast({
         title: "Something went wrong",
         description: "Your booking couldn't be submitted. Please try again.",
         variant: "destructive",
       });
+    } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   const handleClose = () => {
-    // Reset everything when closing
     form.reset();
     setBookingSubmitted(false);
     setBookingData(null);
@@ -100,25 +93,25 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
 
   // Time slots available for booking
   const timeSlots = [
-    '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', 
+    '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
     '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'
   ];
 
-  // BANK_DETAILS is already imported at the top
+  const selectedServiceData = SERVICES.find(s => s.title === form.watch('service'));
 
   return (
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black bg-opacity-80"
             onClick={handleClose}
           />
-          
-          <motion.div 
+
+          <motion.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -131,7 +124,7 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                 <h2 className="text-2xl font-bold font-serif gold-gradient">
                   {bookingSubmitted ? "Complete Your Booking" : "Book a Photography Session"}
                 </h2>
-                <button 
+                <button
                   onClick={handleClose}
                   className="text-gray-400 hover:text-white transition-colors"
                   aria-label="Close booking modal"
@@ -139,13 +132,13 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                   <X size={24} />
                 </button>
               </div>
-              
+
               {!bookingSubmitted ? (
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <Label htmlFor="name" className="text-gray-300">Full Name</Label>
-                      <Input 
+                      <Input
                         id="name"
                         placeholder="Enter your name"
                         {...form.register('name')}
@@ -155,10 +148,10 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                         <p className="text-red-500 text-sm mt-1">{form.formState.errors.name.message}</p>
                       )}
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="email" className="text-gray-300">Email</Label>
-                      <Input 
+                      <Input
                         id="email"
                         type="email"
                         placeholder="Enter your email"
@@ -170,10 +163,10 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                       )}
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="phone" className="text-gray-300">Phone Number</Label>
-                    <Input 
+                    <Input
                       id="phone"
                       placeholder="Enter your phone number"
                       {...form.register('phone')}
@@ -183,10 +176,10 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.phone.message}</p>
                     )}
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="service" className="text-gray-300">Select Service</Label>
-                    <Select onValueChange={(value) => form.setValue('service', value)}>
+                    <Select onValueChange={(value) => form.setValue('service', value)} defaultValue={selectedService}>
                       <SelectTrigger className="bg-gray-800 border-gray-700 text-white mt-1">
                         <SelectValue placeholder="Choose a service" />
                       </SelectTrigger>
@@ -197,9 +190,9 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                               <Camera className="mr-2 h-4 w-4 text-yellow-500" />
                               <span>{service.title}</span>
                               <span className="ml-auto text-sm text-gray-400">
-                                {service.packages && service.packages.length > 0 ? 
-                                  `Rs. ${service.packages[0].price}+` : 
-                                  "Custom pricing"}
+                                {service.packages && service.packages.length > 0
+                                  ? `Rs. ${service.packages[0].price}+`
+                                  : "Custom pricing"}
                               </span>
                             </div>
                           </SelectItem>
@@ -210,43 +203,45 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.service.message}</p>
                     )}
                   </div>
-                  
-                  <div>
-                    <Label htmlFor="package" className="text-gray-300">Select Package</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
-                      {form.watch('service') && SERVICES.find(s => s.title === form.watch('service'))?.packages.map((pkg, index) => (
-                        <div 
-                          key={index}
-                          onClick={() => {
-                            form.setValue('package', pkg.name);
-                            form.setValue('packagePrice', pkg.price);
-                          }}
-                          className={`
-                            cursor-pointer p-4 rounded-md border 
-                            ${form.watch('package') === pkg.name 
-                              ? 'border-yellow-500 bg-yellow-600/10' 
-                              : 'border-gray-700 bg-gray-800 hover:border-yellow-600/50'
-                            }
-                            transition-colors
-                          `}
-                        >
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="font-medium text-white">{pkg.name}</span>
-                            <span className="gold-gradient font-bold">Rs. {pkg.price}</span>
+
+                  {selectedServiceData && (
+                    <div>
+                      <Label htmlFor="package" className="text-gray-300">Select Package</Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
+                        {selectedServiceData.packages.map((pkg, index) => (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              form.setValue('package', pkg.name);
+                              form.setValue('packagePrice', pkg.price);
+                            }}
+                            className={`
+                              cursor-pointer p-4 rounded-md border
+                              ${form.watch('package') === pkg.name
+                                ? 'border-yellow-500 bg-yellow-600/10'
+                                : 'border-gray-700 bg-gray-800 hover:border-yellow-600/50'
+                              }
+                              transition-colors
+                            `}
+                          >
+                            <div className="flex justify-between items-center mb-2">
+                              <span className="font-medium text-white">{pkg.name}</span>
+                              <span className="gold-gradient font-bold">Rs. {pkg.price}</span>
+                            </div>
+                            <div className="text-sm text-gray-400">
+                              {pkg.features?.map((feature, i) => (
+                                <div key={i} className="flex items-center">
+                                  <span className="text-yellow-500 mr-2">✓</span>
+                                  <span>{feature}</span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                          <div className="text-sm text-gray-400">
-                            {pkg.features?.map((feature, i) => (
-                              <div key={i} className="flex items-center">
-                                <i className='bx bx-check text-yellow-500 mr-1'></i>
-                                <span>{feature}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <Label className="text-gray-300 block mb-1">Preferred Date</Label>
@@ -275,10 +270,10 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                         </PopoverContent>
                       </Popover>
                       {form.formState.errors.date && (
-                        <p className="text-red-500 text-sm mt-1">{form.formState.errors.date.message as string}</p>
+                        <p className="text-red-500 text-sm mt-1">{form.formState.errors.date.message}</p>
                       )}
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="time" className="text-gray-300">Preferred Time</Label>
                       <Select onValueChange={(value) => form.setValue('time', value)}>
@@ -301,10 +296,10 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                       )}
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="location" className="text-gray-300">Shoot Location</Label>
-                    <Input 
+                    <Input
                       id="location"
                       placeholder="Enter the location for your photo shoot"
                       {...form.register('location')}
@@ -314,10 +309,10 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.location.message}</p>
                     )}
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="message" className="text-gray-300">Additional Information</Label>
-                    <Textarea 
+                    <Textarea
                       id="message"
                       placeholder="Any special requests or details about your shoot"
                       {...form.register('message')}
@@ -325,16 +320,16 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                       className="bg-gray-800 border-gray-700 text-white mt-1"
                     />
                   </div>
-                  
+
                   <div>
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       className="w-full gold-button"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Submitting..." : "Book Now"}
                     </Button>
-                    
+
                     <p className="text-gray-400 text-sm text-center mt-4">
                       By booking, you agree to our terms and cancellation policy.
                     </p>
@@ -354,13 +349,13 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                       <p><span className="text-gray-400">Location:</span> {bookingData?.location}</p>
                     </div>
                   </div>
-                  
+
                   <div>
                     <h3 className="text-xl font-bold font-serif gold-gradient mb-4">Payment Information</h3>
                     <p className="text-gray-300 mb-4">
                       To secure your booking, please make a deposit of 50% of the session fee using the following bank details:
                     </p>
-                    
+
                     <div className="space-y-4 mb-6 bg-gray-800 p-4 rounded-md border border-yellow-600/30">
                       <div className="flex flex-col">
                         <span className="text-sm text-gray-400">Bank</span>
@@ -383,59 +378,22 @@ const BookingModal = ({ isOpen, onClose, selectedService }: BookingModalProps) =
                         <span className="text-white font-medium">{BANK_DETAILS.email}</span>
                       </div>
                     </div>
-                    
+
                     <div className="bg-gray-800 p-4 rounded-md border border-yellow-600/20 mb-6">
                       <p className="text-gray-300 text-sm">
                         <span className="gold-gradient font-bold">Payment Reference:</span> Please use your name and session date as the payment reference (e.g., JohnDoe-15Apr2025).
                       </p>
                     </div>
-                    
+
                     <div className="bg-gray-800 p-4 rounded-md border border-yellow-600/20 mb-6">
                       <p className="text-gray-300 text-sm">
-                        After making the payment, please upload your payment confirmation below. The remaining balance will be due on the day of the photoshoot.
+                        After making the payment, please send your payment confirmation to our email. The remaining balance will be due on the day of the photoshoot.
                       </p>
                     </div>
                   </div>
-                  
-                  {/* File Upload Section */}
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-bold font-serif gold-gradient mb-2">Upload Payment Confirmation</h3>
-                    
-                    <div className="grid grid-cols-1 gap-4">
-                      <div className="border-2 border-dashed border-yellow-600/30 rounded-lg p-6 text-center">
-                        <input 
-                          type="file" 
-                          id="paymentProof" 
-                          className="hidden" 
-                          accept=".jpg,.jpeg,.png,.pdf" 
-                          onChange={(e) => {
-                            // Here you would handle the file upload
-                            if (e.target.files?.length) {
-                              toast({
-                                title: "File received",
-                                description: `File "${e.target.files[0].name}" uploaded successfully.`,
-                              });
-                            }
-                          }}
-                        />
-                        <label 
-                          htmlFor="paymentProof" 
-                          className="flex flex-col items-center justify-center cursor-pointer"
-                        >
-                          <div className="p-4 rounded-full bg-yellow-600/10 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                          </div>
-                          <span className="text-white font-medium mb-1">Upload File</span>
-                          <span className="text-gray-400 text-sm">JPG, PNG or PDF (max 5MB)</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  
+
                   <div className="flex space-x-4 pt-6">
-                    <Button 
+                    <Button
                       className="w-full gold-button"
                       onClick={handleClose}
                     >
